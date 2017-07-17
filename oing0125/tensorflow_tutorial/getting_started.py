@@ -60,32 +60,24 @@ y = tf.placeholder(tf.float32)
 squared_deltas = tf.square(linear_model - y)
 # loss를 통해 현재 model이 예상치에 얼마나 떨어져있는지 알 수 있다.
 loss = tf.reduce_sum(squared_deltas)
-print(sess.run(loss, {x:[1,2,3,4], y:[0,-1,-2,-3]}))
+print("before fix X, B : ",sess.run(loss, {x:[1,2,3,4], y:[0,-1,-2,-3]}))
 
 # loss value를 줄이기 위해 W와 b를 재설정하여 예상치로 접근할 수 있다.
 fixW = tf.assign(W, [-1.])
 fixb = tf.assign(b, [1.])
 sess.run([fixW, fixb])
-print("after fix X, b", sess.run(loss, {x:[1,2,3,4], y:[0,-1,-2,-3]}))
-
+print("after fix X, b : ", sess.run(loss, {x:[1,2,3,4], y:[0,-1,-2,-3]}))
 
 #TODO https://www.tensorflow.org/get_started/get_started
 ########################### train API #############################
 
+optimizer = tf.train.GradientDescentOptimizer(0.01)
+train = optimizer.minimize(loss)
 
+sess.run(init)
+for i in range(1000):
+    sess.run(train, {x:[1,2,3,4], y:[0,-1,-2,-3]})
 
-
-
-
-
-
-
-
-
-
-
+print(sess.run([W, b]))
 
 sess.close()
-
-
-
